@@ -1,14 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Driver : MonoBehaviour
 {
     [SerializeField] float steerSpeed = 30.0f;
     [SerializeField] float moveSpeed = 1.0f;
+
+    [SerializeField] TMP_Text boostText;
     
     void Start()
     {
-        
+        boostText.gameObject.SetActive(false);
     }
 
 
@@ -29,5 +32,21 @@ public class Driver : MonoBehaviour
         {
             transform.Rotate(0, 0, -steerSpeed * Time.deltaTime);
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Boost"))
+        {
+            moveSpeed = 10.0f;
+            boostText.gameObject.SetActive(true);
+            Destroy(collision.gameObject);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        boostText.gameObject.SetActive(false);
+        moveSpeed = 5.0f;
     }
 }
